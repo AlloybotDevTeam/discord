@@ -2,7 +2,7 @@
   "name": "abm-discord",
   "version": "0.0.0",
   "description": "Discord connection module for Alloybot",
-  "main": "discord.js",
+  "main": "Discord.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
