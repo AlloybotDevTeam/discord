@@ -1,5 +1,5 @@
 {
-  "name": "discord",
+  "name": "abm-discord",
   "version": "0.0.0",
   "description": "Discord connection module for Alloybot",
   "main": "discord.js",
