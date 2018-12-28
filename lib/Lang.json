@@ -1,0 +1,9 @@
+{
+  "type": ["Other"],
+  "description": {
+    "invite": "Generates a link to join the bot to other discord servers."
+  },
+  "label": {
+    "invite": "Generated Invite!"
+  }
+}

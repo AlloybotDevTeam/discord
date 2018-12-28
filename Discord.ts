@@ -1,22 +1,32 @@
-import { default as Alloybot, Type, Util, ConfigBuilder } from '../../Alloybot';
+import { default as Alloybot, IFace, Util, ConfigBuilder } from '../../Alloybot';
+import { default as Invite } from './lib/Invite';
 import { Client } from 'discord.js';
 
-export default class Discord implements Type.IConnection {
-  public readonly name: string = 'Discord';
-  public readonly dependencies: string[] = [];
-  public readonly dependants: Type.IPlugin[] = Alloybot.getDependants(this.name);
-  public readonly connection: Client = new Client();
-  public config;
+export default class Discord extends IFace.IConnection {
+  protected Name: string = 'Discord';
+  protected Dependencies: string[] = [];
+  protected Dependants: IFace.IPlugin[] = Alloybot.getDependants(this.Name);
+  protected Connection: Client = new Client();
+  protected Logger: Util.Logger = new Util.Logger(this.Name);
+  protected Config;
 
   constructor() {
-    let Config: ConfigBuilder = new ConfigBuilder('Discord', require('./package.json').version);
-    Config.addOption('token', ['string'], 'Discord Bot Token');
-    Config.close();
-    this.config = Config.getConfig();
+    super();
+    let _config: ConfigBuilder = new ConfigBuilder('Discord', require('./package.json').version);
+    _config.addOption('token', ['string'], 'Discord Bot Token');
+    _config.addOption('permissions', ['Array<string>'], 'Bot Permissions to be added when invited via link. (Requires Commander plugin)');
+    _config.close();
+    this.Config = _config.getConfig();
+
+    if (Alloybot.isPluginLoaded('Commander')) {
+      Alloybot.getPlugin('Commander').registerCommand(new Invite(this.Config.permissions));
+    } else {
+      this.Logger.note('Commander not loaded. Leaving commands unloaded.');
+    }
   }
 
   public connect(): Discord {
-    this.connection.login(this.config.token);
+    this.Connection.login(this.Config.token);
     return this;
   }
 }
